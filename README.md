@@ -5,6 +5,8 @@
 - **Streamlined parsing**: Processes 10MB specs (~5k endpoints) in <3s via parallel JSON decoding
 - **Reliable execution**: Built-in `make_request` tool handles complex API calls that break naive implementations
 
+[![Demo](https://img.youtube.com/vi/dVd2FjqokLc/0.jpg)](https://youtu.be/dVd2FjqokLc)
+
 Technical highlights:
 ```python
 query -> [Embedding] -> FAISS TopK -> OpenAPI docs -> MCP Client (Claude Desktop)
