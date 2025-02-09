@@ -5,7 +5,7 @@
 - **Streamlined parsing**: Processes 10MB specs (~5k endpoints) in <3s via parallel JSON decoding
 - **Reliable execution**: Built-in `make_request` tool handles complex API calls that break naive implementations
 
-https://github.com/user-attachments/assets/4481e886-3fbc-4a96-b385-e015eecf5a2d
+https://github.com/user-attachments/assets/484790d2-b5a7-475d-a64d-157e839ad9b0
 
 Technical highlights:
 ```python
