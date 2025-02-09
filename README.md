@@ -11,6 +11,20 @@ query -> [Embedding] -> FAISS TopK -> OpenAPI docs -> MCP Client (Claude Desktop
 MCP Client -> Construct OpenAPI Request -> Execute Request -> Return Response
 ```
 
+## Usage Example
+Claude Desktop Project Prompt:
+```
+You should get the api spec details from tools financial_api_request_schema
+
+You task is use financial_make_request tool to make the requests to get response. You should follow the api spec to add authorization header:
+Authorization: Bearer <xxxxxxxxx>
+```
+In chat, you can do:
+```
+Get prices for all stocks
+```
+
+
 ## Features
 
 - 🏗️ Multiple deployment options:
