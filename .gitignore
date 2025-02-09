@@ -1,0 +1,82 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.env
+.venv
+.python-version
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+.vs/
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# Logs
+*.log
+logs/
+log/
+
+# Local development
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# DynamoDB Local files
+.dynamodb/
+
+# Distribution / packaging
+.Python
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+.history/ 
