@@ -1,5 +1,7 @@
 # MCP Server: Scalable OpenAPI Endpoint Discovery and API Request Tool
 
+[![smithery badge](https://smithery.ai/badge/@baryhuang/mcp-server-any-openapi)](https://smithery.ai/server/@baryhuang/mcp-server-any-openapi)
+
 **Production-grade solution for API spec analysis** - An async FastAPI service that indexes and queries OpenAPI endpoints using endpoint-centric semantic search. Solves Claude MCP's silent failures with large specs (>100KB) through:
 - **Vectorized endpoint indexing**: 384D MiniLM-L3 embeddings (43MB) + FAISS in-memory search
 - **Streamlined parsing**: Processes 10MB specs (~5k endpoints) in <3s via parallel JSON decoding
@@ -72,6 +74,14 @@ This server specifically solves:
    - Still outperforms whole-document processing
 
 ## Installation
+
+### Installing via Smithery
+
+To install Scalable OpenAPI Endpoint Discovery and API Request Tool for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@baryhuang/mcp-server-any-openapi):
+
+```bash
+npx -y @smithery/cli install @baryhuang/mcp-server-any-openapi --client claude
+```
 
 ### Using pip
 
