@@ -13,7 +13,43 @@ query -> [Embedding] -> FAISS TopK -> OpenAPI docs -> MCP Client (Claude Desktop
 MCP Client -> Construct OpenAPI Request -> Execute Request -> Return Response
 ```
 
-## Usage Example
+## Multi-instance config example
+
+Here is the multi-instance config example. I design it so it can more flexibly used for multiple set of apis:
+```
+{
+  "mcpServers": {
+    "finance_openapi": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "OPENAPI_JSON_DOCS_URL=https://api.finance.com/openapi.json",
+        "-e",
+        "MCP_API_PREFIX=finance",
+        "buryhuang/mcp-server-any-openapi:latest"
+      ]
+    },
+    "healthcare_openapi": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "OPENAPI_JSON_DOCS_URL=https://api.healthcare.com/openapi.json",
+        "-e",
+        "MCP_API_PREFIX=healthcare",
+        "buryhuang/mcp-server-any-openapi:latest"
+      ]
+    }
+  }
+}
+```
+
+## Claude Desktop Usage Example
 Claude Desktop Project Prompt:
 ```
 You should get the api spec details from tools financial_api_request_schema
@@ -31,16 +67,15 @@ Get prices for all stocks
 
 ## Features
 
-- 🏗️ Multiple deployment options:
-  - Public Docker image (`buryhuang/mcp-server-any-openapi`)
-  - Local Python package (`pip install`)
+- 🧠 Use remote openapi json file as source, no local file system access, no updating required for API changes
 - 🔍 Semantic search using optimized MiniLM-L3 model (43MB vs original 90MB)
-- 📚 Comprehensive endpoint documentation including parameters, request bodies, and responses
 - 🚀 FastAPI-based server with async support
-- 🐳 Multi-platform Docker support
-- 🧠 Intelligent chunking for large OpenAPI specs (handles 100KB+ documents)
+- 🧠 Endpoint based chunking OpenAPI specs (handles 100KB+ documents), no loss of endpoint context
 - ⚡ In-memory FAISS vector search for instant endpoint discovery
-- 🐢 Cold start penalty (~15s for model loading)
+
+## Limitations
+- 🐢 Cold start penalty (~15s for model loading) if not using docker image
+- If using docker image, the size may be bigger
 
 ## Challenges Addressed
 
@@ -164,7 +199,7 @@ Official images support 3 platforms:
 ```bash
 # Build and push using buildx
 docker buildx create --use
-docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 \
+docker buildx build --platform linux/amd64,linux/arm64 \
   -t buryhuang/mcp-server-any-openapi:latest \
   --push .
 ```

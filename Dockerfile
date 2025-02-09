@@ -1,31 +1,65 @@
-# Use Python base image
-FROM python:3.10-slim-bookworm
+# --------
+# Builder stage
+# --------
+FROM python:3.11-slim AS builder
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
+# Install build tools and dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
+    libc6-dev \
+    libffi-dev \
+    libpq-dev \
+    make \
     && rm -rf /var/lib/apt/lists/*
 
-# Install the project into `/app`
+# Set working directory for builder
+WORKDIR /app
+
+# Copy the entire project first
+COPY . /app/
+
+# Upgrade pip and build wheels for all dependencies
+RUN pip install --upgrade pip \
+    && mkdir /wheels \
+    && pip wheel --wheel-dir=/wheels -r requirements.txt
+
+# --------
+# Final runtime stage
+# --------
+FROM python:3.11-slim
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libffi-dev \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 # Copy the entire project
-COPY . /app
+COPY . /app/
 
-# Install dependencies first for better caching
-RUN pip install --no-cache-dir \
-    mcp \
-    pydantic \
-    requests \
-    "numpy<2.0" \
-    fastapi \
-    uvicorn \
-    && pip install --no-cache-dir faiss-cpu sentence-transformers
+# Copy the wheels built in the builder stage
+COPY --from=builder /wheels /wheels
 
-# Install the package in development mode
-RUN pip install -e .
+# Install Python dependencies from the local wheel cache
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir --no-index --find-links=/wheels -r requirements.txt
+
+# Create models directory
+RUN mkdir -p /app/models
+
+# Pre-download models
+RUN python -c "from sentence_transformers import SentenceTransformer; \
+    model = SentenceTransformer('all-MiniLM-L6-v2'); \
+    model.save('/app/models/all-MiniLM-L6-v2')"
+
+# Set environment variable for Sentence Transformers
+ENV SENTENCE_TRANSFORMERS_HOME=/app/models
+
+# Expose port
+EXPOSE 8000
 
 # Run the server
 ENTRYPOINT ["python", "-m", "mcp_server_any_openapi.server"]
