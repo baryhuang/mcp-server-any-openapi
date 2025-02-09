@@ -155,6 +155,16 @@ Get API endpoint schemas that match your intent. Returns endpoint details includ
 
 ## Docker Support
 
+### Multi-Architecture Builds
+Official images support 3 platforms:
+```bash
+# Build and push using buildx
+docker buildx create --use
+docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 \
+  -t buryhuang/mcp-server-any-openapi:latest \
+  --push .
+```
+
 ### Flexible Tool Naming
 Control tool names through `MCP_API_PREFIX`:
 ```bash
@@ -167,13 +177,13 @@ docker run -e MCP_API_PREFIX=finance_ ...
 - linux/arm64
 - linux/arm/v7
 
-### Option 1: Pull from Docker Hub
+### Option 1: Use Prebuilt Image (Docker Hub)
 
 ```bash
 docker pull buryhuang/mcp-server-any-openapi:latest
 ```
 
-### Option 2: Build Locally
+### Option 2: Local Development Build
 
 ```bash
 docker build -t mcp-server-any-openapi .
