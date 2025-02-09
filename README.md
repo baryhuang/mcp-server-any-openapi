@@ -20,6 +20,8 @@ You should get the api spec details from tools financial_api_request_schema
 
 You task is use financial_make_request tool to make the requests to get response. You should follow the api spec to add authorization header:
 Authorization: Bearer <xxxxxxxxx>
+
+The api base_url is https://api.example.com
 ```
 In chat, you can do:
 ```
