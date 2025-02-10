@@ -36,6 +36,7 @@ MCP Client -> Construct OpenAPI Request -> Execute Request -> Return Response
 - ⚡ In-memory FAISS vector search for instant endpoint discovery
 
 ## Limitations
+- Not supporting linux/arm/v7 (build fails on Transformer library)
 - 🐢 Cold start penalty (~15s for model loading) if not using docker image
 - [Obsolete] Current docker image disabled downloading models. You have a dependency over huggingface. When you load the Claude Desktop, it takes some time to download the model. If huggingface is down, your server will not start.
 - The latest docker image is embedding pre-downloaded models. If there is issues, I would revert to the old one.
@@ -92,35 +93,6 @@ In chat, you can do:
 Get prices for all stocks
 ```
 
-
-## Challenges Addressed
-
-This server specifically solves:
-1. **Oversized OpenAPI Processing**  
-   Fixes Claude MCP's silent failures with API specs >100KB through:
-   - Per-endpoint semantic indexing (avoids whole-doc processing)
-   - Streamlined JSON parsing that ignores non-essential fields
-   - Error-resistant chunking that maintains endpoint context
-
-2. **Scalable Vector Search**  
-   In-memory indexing enables:
-   - Instant search across complex API landscapes
-   - Async processing of 100+ concurrent queries
-   - Efficient memory usage (~10KB per endpoint)
-
-## Known Limitations
-
-1. **Initialization Delay**  
-   First startup requires:
-   - ~15s for embedding model download (one-time)
-   - ~3s model loading on each server start
-   - Mitigation: Keep container warm or use larger instance types
-
-2. **Embedding Quality Tradeoff**  
-   Smaller model has:
-   - 384-dim vs original 768-dim embeddings
-   - 5% lower accuracy on technical text
-   - Still outperforms whole-document processing
 
 ## Installation
 
@@ -238,7 +210,6 @@ docker run -e MCP_API_PREFIX=finance_ ...
 ### Supported Platforms
 - linux/amd64
 - linux/arm64
-- linux/arm/v7
 
 ### Option 1: Use Prebuilt Image (Docker Hub)
 
