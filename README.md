@@ -34,7 +34,7 @@ MCP Client -> Construct OpenAPI Request -> Execute Request -> Return Response
 
 ## Limitations
 - 🐢 Cold start penalty (~15s for model loading) if not using docker image
-- If using docker image, the size may be bigger
+- Current docker image disabled downloading models. You have a dependency over huggingface. When you load the Claude Desktop, it takes some time to download the model. If huggingface is down, your server will not start.
 
 
 ## Multi-instance config example
