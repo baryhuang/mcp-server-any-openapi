@@ -2,6 +2,9 @@
 [![Docker Hub](https://img.shields.io/docker/v/buryhuang/mcp-server-any-openapi?label=Docker%20Hub)](https://hub.docker.com/r/buryhuang/mcp-server-any-openapi)
 [![smithery badge](https://smithery.ai/badge/@baryhuang/mcp-server-any-openapi)](https://smithery.ai/server/@baryhuang/mcp-server-any-openapi)
 
+## TODO
+- The docker image is 2GB without pre-downloaded models. Its 3.76GB with pre-downloaded models!! Too big, someone please help me to reduce the size.
+
 ## TL'DR
 **Why I create this**: I want to serve my private API, whose swagger openapi docs is a few hundreds KB in size.
 - Claude MCP simply error on processing these size of file
@@ -34,7 +37,8 @@ MCP Client -> Construct OpenAPI Request -> Execute Request -> Return Response
 
 ## Limitations
 - 🐢 Cold start penalty (~15s for model loading) if not using docker image
-- Current docker image disabled downloading models. You have a dependency over huggingface. When you load the Claude Desktop, it takes some time to download the model. If huggingface is down, your server will not start.
+- [Obsolete] Current docker image disabled downloading models. You have a dependency over huggingface. When you load the Claude Desktop, it takes some time to download the model. If huggingface is down, your server will not start.
+- The latest docker image is embedding pre-downloaded models. If there is issues, I would revert to the old one.
 
 
 ## Multi-instance config example

@@ -51,9 +51,9 @@ RUN pip install --upgrade pip \
 RUN mkdir -p /app/models
 
 # Pre-download models
-# RUN python -c "from sentence_transformers import SentenceTransformer; \
-#     model = SentenceTransformer('all-MiniLM-L6-v2'); \
-#     model.save('/app/models/all-MiniLM-L6-v2')"
+RUN python -c "from sentence_transformers import SentenceTransformer; \
+    model = SentenceTransformer('all-MiniLM-L6-v2'); \
+    model.save('/app/models/all-MiniLM-L6-v2')"
 
 # Set environment variables
 ENV SENTENCE_TRANSFORMERS_HOME=/app/models
