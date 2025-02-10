@@ -51,15 +51,16 @@ RUN pip install --upgrade pip \
 RUN mkdir -p /app/models
 
 # Pre-download models
-RUN python -c "from sentence_transformers import SentenceTransformer; \
-    model = SentenceTransformer('all-MiniLM-L6-v2'); \
-    model.save('/app/models/all-MiniLM-L6-v2')"
+# RUN python -c "from sentence_transformers import SentenceTransformer; \
+#     model = SentenceTransformer('all-MiniLM-L6-v2'); \
+#     model.save('/app/models/all-MiniLM-L6-v2')"
 
-# Set environment variable for Sentence Transformers
+# Set environment variables
 ENV SENTENCE_TRANSFORMERS_HOME=/app/models
+ENV PYTHONPATH=/app/src
 
 # Expose port
 EXPOSE 8000
 
-# Run the server
-ENTRYPOINT ["python", "-m", "mcp_server_any_openapi.server"]
+# Run the server directly
+ENTRYPOINT ["python", "src/mcp_server_any_openapi/server.py"]

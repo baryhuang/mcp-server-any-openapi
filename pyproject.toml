@@ -6,6 +6,9 @@ build-backend = "hatchling.build"
 name = "mcp-server-any-openapi"
 version = "0.1.0"
 description = "MCP server for Any OpenAPI resources"
+authors = [
+    { name = "Bary Huang", email = "buryhuang@gmail.com" }
+]
 requires-python = ">=3.10"
 dependencies = [
     "mcp",
@@ -23,3 +26,6 @@ dependencies = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/mcp_server_any_openapi"]
+
+[project.scripts]
+mcp-server-any-openapi = "mcp_server_any_openapi:main"

@@ -4,7 +4,7 @@ import logging
 from . import server
 
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger('mcp_any_openapi')
+logger = logging.getLogger('mcp_server_any_openapi')
 
 def main():
     logger.debug("Starting mcp-server-any-openapi main()")
