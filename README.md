@@ -12,7 +12,7 @@ Eventually I came down to this solution:
 - It uses in-memory semantic search to find relevant Api endpoints by natural language (such as list products)
 - It returns the complete end-point docs (as I designed it to store one endpoint as one chunk) in millionseconds (as it's in memory)
 
-**Boom**, Claude now knows what API to call.
+**Boom**, Claude now knows what API to call, with the **full parameters**!
 
 Wait I have to create another tool in this server to make the actual restful request, because "fetch" server simply don't work, and I don't want to debug why.
 
