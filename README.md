@@ -2,10 +2,19 @@
 
 [![smithery badge](https://smithery.ai/badge/@baryhuang/mcp-server-any-openapi)](https://smithery.ai/server/@baryhuang/mcp-server-any-openapi)
 
-**Production-grade solution for API spec analysis** - An async FastAPI service that indexes and queries OpenAPI endpoints using endpoint-centric semantic search. Solves Claude MCP's silent failures with large specs (>100KB) through:
-- **Vectorized endpoint indexing**: 384D MiniLM-L3 embeddings (43MB) + FAISS in-memory search
-- **Streamlined parsing**: Processes 10MB specs (~5k endpoints) in <3s via parallel JSON decoding
-- **Reliable execution**: Built-in `make_request` tool handles complex API calls that break naive implementations
+## TL'DR
+**Why I create this**: I want to serve my private API, whose swagger openapi docs is a few hundreds KB in size.
+- Claude MCP simply error on processing these size of file
+- I attempted convert the result to YAML, not small enough and a lot of errors. FAILED
+- I attempted to provide a API category, then ask MCP Client (Claude Desktop) to get the api doc by group. Still too big, FAILED.
+
+Eventually I came down to this solution:
+- It uses in-memory semantic search to find relevant Api endpoints by natural language (such as list products)
+- It returns the complete end-point docs (as I designed it to store one endpoint as one chunk) in millionseconds (as it's in memory)
+
+**Boom**, Claude now knows what API to call.
+
+Wait I have to create another tool in this server to make the actual restful request, because "fetch" server simply don't work, and I don't want to debug why.
 
 https://github.com/user-attachments/assets/484790d2-b5a7-475d-a64d-157e839ad9b0
 
@@ -14,6 +23,19 @@ Technical highlights:
 query -> [Embedding] -> FAISS TopK -> OpenAPI docs -> MCP Client (Claude Desktop)
 MCP Client -> Construct OpenAPI Request -> Execute Request -> Return Response
 ```
+
+## Features
+
+- 🧠 Use remote openapi json file as source, no local file system access, no updating required for API changes
+- 🔍 Semantic search using optimized MiniLM-L3 model (43MB vs original 90MB)
+- 🚀 FastAPI-based server with async support
+- 🧠 Endpoint based chunking OpenAPI specs (handles 100KB+ documents), no loss of endpoint context
+- ⚡ In-memory FAISS vector search for instant endpoint discovery
+
+## Limitations
+- 🐢 Cold start penalty (~15s for model loading) if not using docker image
+- If using docker image, the size may be bigger
+
 
 ## Multi-instance config example
 
@@ -66,18 +88,6 @@ In chat, you can do:
 Get prices for all stocks
 ```
 
-
-## Features
-
-- 🧠 Use remote openapi json file as source, no local file system access, no updating required for API changes
-- 🔍 Semantic search using optimized MiniLM-L3 model (43MB vs original 90MB)
-- 🚀 FastAPI-based server with async support
-- 🧠 Endpoint based chunking OpenAPI specs (handles 100KB+ documents), no loss of endpoint context
-- ⚡ In-memory FAISS vector search for instant endpoint discovery
-
-## Limitations
-- 🐢 Cold start penalty (~15s for model loading) if not using docker image
-- If using docker image, the size may be bigger
 
 ## Challenges Addressed
 
