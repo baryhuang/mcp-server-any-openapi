@@ -45,7 +45,7 @@ MCP Client -> Construct OpenAPI Request -> Execute Request -> Return Response
 ## Multi-instance config example
 
 Here is the multi-instance config example. I design it so it can more flexibly used for multiple set of apis:
-```
+```json
 {
   "mcpServers": {
     "finance_openapi": {
@@ -78,6 +78,33 @@ Here is the multi-instance config example. I design it so it can more flexibly u
 }
 ```
 
+In this example:
+- The server will automatically extract base URLs from the OpenAPI docs:
+  - `https://api.finance.com` for finance APIs
+  - `https://api.healthcare.com` for healthcare APIs
+- You can optionally override the base URL using `API_REQUEST_BASE_URL` environment variable:
+```json
+{
+  "mcpServers": {
+    "finance_openapi": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "OPENAPI_JSON_DOCS_URL=https://api.finance.com/openapi.json",
+        "-e",
+        "API_REQUEST_BASE_URL=https://api.finance.staging.com",
+        "-e",
+        "MCP_API_PREFIX=finance",
+        "buryhuang/mcp-server-any-openapi:latest"
+      ]
+    }
+  }
+}
+```
+
 ## Claude Desktop Usage Example
 Claude Desktop Project Prompt:
 ```
@@ -86,7 +113,7 @@ You should get the api spec details from tools financial_api_request_schema
 You task is use financial_make_request tool to make the requests to get response. You should follow the api spec to add authorization header:
 Authorization: Bearer <xxxxxxxxx>
 
-The api base_url is https://api.example.com
+Note: The base URL will be returned in the api_request_schema response, you don't need to specify it manually.
 ```
 In chat, you can do:
 ```

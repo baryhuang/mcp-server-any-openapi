@@ -5,6 +5,7 @@ import requests
 import numpy as np
 import faiss
 import os
+from urllib.parse import urlparse
 from sentence_transformers import SentenceTransformer
 from fastapi.openapi.utils import get_openapi
 from pydantic import BaseModel, create_model
@@ -20,6 +21,10 @@ from mcp.server import NotificationOptions
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("mcp_any_openapi")
 
+def extract_base_url(url: str) -> str:
+    """Extract base URL from a full URL."""
+    parsed = urlparse(url)
+    return f"{parsed.scheme}://{parsed.netloc}"
 
 class EndpointSearcher:
     def __init__(self):
@@ -129,20 +134,28 @@ class EndpointSearcher:
 
     def _initialize_endpoints(self):
         """Initialize endpoints from OpenAPI spec"""
+        # Get OpenAPI spec URL from environment variable
+        api_url = os.getenv('OPENAPI_JSON_DOCS_URL', 'https://raw.githubusercontent.com/seriousme/fastify-openapi-glue/refs/heads/master/examples/petstore/petstore-openapi.v3.json')
+        
+        # Extract base URL from OpenAPI spec URL and use it as default for API_REQUEST_BASE_URL
+        default_base_url = extract_base_url(api_url)
+        self.base_url = os.getenv('API_REQUEST_BASE_URL', default_base_url)
+        
+        logger.info(f"Using API base URL: {self.base_url}")
+        
         try:
-            api_url = os.getenv('OPENAPI_JSON_DOCS_URL', 'https://raw.githubusercontent.com/seriousme/fastify-openapi-glue/refs/heads/master/examples/petstore/petstore-openapi.v3.json')
             response = requests.get(api_url)
             response.raise_for_status()
-            spec = response.json()
+            openapi_spec = response.json()
             
             # Extract endpoints with their full documentation
-            for path, path_item in spec['paths'].items():
+            for path, path_item in openapi_spec['paths'].items():
                 for method, operation in path_item.items():
                     if method.lower() not in ['get', 'post', 'put', 'delete', 'patch']:
                         continue
 
                     # Create full document for the endpoint
-                    doc = self._create_endpoint_document(path, method, operation, spec.get('components', {}))
+                    doc = self._create_endpoint_document(path, method, operation, openapi_spec.get('components', {}))
                     
                     self.endpoints.append({
                         'path': path,
@@ -270,6 +283,7 @@ async def main():
                 results = endpoint_searcher.search(query)
                 
                 return [types.TextContent(type="text", text=json.dumps({
+                    "api_base_url": endpoint_searcher.base_url,
                     "matching_endpoints": results
                 }, indent=2))]
             elif name == request_tool_name:
