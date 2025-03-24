@@ -1,6 +1,6 @@
 # MCP Server: Scalable OpenAPI Endpoint Discovery and API Request Tool
-[![Docker Hub](https://img.shields.io/docker/v/buryhuang/mcp-server-any-openapi?label=Docker%20Hub)](https://hub.docker.com/r/buryhuang/mcp-server-any-openapi)
 [![Docker Hub](https://img.shields.io/docker/pulls/buryhuang/mcp-server-any-openapi?label=Docker%20Hub)](https://hub.docker.com/r/buryhuang/mcp-server-any-openapi)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## TODO
 - The docker image is 2GB without pre-downloaded models. Its 3.76GB with pre-downloaded models!! Too big, someone please help me to reduce the size.
