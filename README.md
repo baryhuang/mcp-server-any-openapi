@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/baryhuang-mcp-server-any-openapi-badge.png)](https://mseep.ai/app/baryhuang-mcp-server-any-openapi)
+
 # MCP Server: Scalable OpenAPI Endpoint Discovery and API Request Tool
 [![Docker Hub](https://img.shields.io/docker/pulls/buryhuang/mcp-server-any-openapi?label=Docker%20Hub)](https://hub.docker.com/r/buryhuang/mcp-server-any-openapi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
