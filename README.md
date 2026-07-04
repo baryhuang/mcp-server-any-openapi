@@ -126,6 +126,36 @@ In this example:
 }
 ```
 
+For Xquik, use the hosted OpenAPI JSON document and keep the API key in your MCP
+client or secret manager:
+
+```json
+{
+  "mcpServers": {
+    "xquik_openapi": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "OPENAPI_JSON_DOCS_URL=https://xquik.com/openapi.json",
+        "-e",
+        "API_REQUEST_BASE_URL=https://xquik.com/api/v1",
+        "-e",
+        "MCP_API_PREFIX=xquik",
+        "-e",
+        "GLOBAL_TOOL_PROMPT='Access to Xquik APIs for X data search, monitoring, and publishing workflows.'",
+        "buryhuang/mcp-server-any-openapi:latest"
+      ]
+    }
+  }
+}
+```
+
+In your project prompt, tell the MCP client to include `x-api-key: <your key>` in
+the request headers when it calls `xquik_make_request`.
+
 ## Claude Desktop Usage Example
 Claude Desktop Project Prompt:
 ```
