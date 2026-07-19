@@ -7,19 +7,18 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('mcp_server_any_openapi')
 
 def main():
+    """Validate command-line arguments and start the MCP server."""
     logger.debug("Starting mcp-server-any-openapi main()")
     parser = argparse.ArgumentParser(description='Any OpenAPI MCP Server')
-    parser.add_argument('--access-token', help='Any OpenAPI access token')
-    args = parser.parse_args()
-    
-    logger.debug(f"Access token from args: {args.access_token}")
+    parser.parse_args()
+
     # Run the async main function
     logger.debug("About to run server.main()")
-    asyncio.run(server.main(args.access_token))
+    asyncio.run(server.main())
     logger.debug("Server main() completed")
 
 if __name__ == "__main__":
     main()
 
 # Expose important items at package level
-__all__ = ["main", "server"] 
+__all__ = ["main", "server"]

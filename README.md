@@ -92,6 +92,21 @@ Here is the multi-instance config example. I design it so it can more flexibly u
         "GLOBAL_TOOL_PROMPT='Access to insights apis for Healthcare API services efg.com .",
         "buryhuang/mcp-server-any-openapi:latest"
       ]
+    },
+    "xquik_openapi": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "OPENAPI_JSON_DOCS_URL=https://xquik.com/openapi.json",
+        "-e",
+        "MCP_API_PREFIX=xquik",
+        "-e",
+        "GLOBAL_TOOL_PROMPT='Access Xquik REST API endpoints. Include an x-api-key header when making authenticated requests.'",
+        "buryhuang/mcp-server-any-openapi:latest"
+      ]
     }
   }
 }
@@ -338,3 +353,5 @@ This project is licensed under the terms included in the LICENSE file.
   - Lazy loading of schema components
   - Parallel parsing of path items
   - Selective embedding generation (omits redundant descriptions)
+
+Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are trademarks of X Corp.

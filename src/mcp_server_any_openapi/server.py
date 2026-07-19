@@ -45,9 +45,17 @@ class EndpointSearcher:
         """Parse schema reference and return the actual schema"""
         if not schema_ref.startswith('#/components/schemas/'):
             return {}
-        
+
         schema_name = schema_ref.split('/')[-1]
         return components['schemas'].get(schema_name, {})
+
+    def _parse_parameter_ref(self, parameter_ref: str, components: Dict) -> Dict:
+        """Parse parameter reference and return the actual parameter."""
+        if not parameter_ref.startswith('#/components/parameters/'):
+            return {}
+
+        parameter_name = parameter_ref.split('/')[-1]
+        return components.get('parameters', {}).get(parameter_name, {})
 
     def _format_schema(self, schema: Dict, components: Dict, indent: int = 0) -> str:
         """Format schema into readable text"""
@@ -103,6 +111,10 @@ class EndpointSearcher:
         if 'parameters' in operation:
             doc_parts.append("Parameters:")
             for param in operation['parameters']:
+                if '$ref' in param:
+                    param = self._parse_parameter_ref(param['$ref'], components)
+                    if not param:
+                        continue
                 param_doc = [f"  - {param['name']} ({param['in']})"]
                 if 'description' in param:
                     param_doc.append(f"    Description: {param['description']}")
